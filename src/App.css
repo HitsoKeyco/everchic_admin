@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Jost:wght@300;400;500&display=swap');
+
+* {
+    font-family: 'Jost', sans-serif;
+    box-sizing: border-box;            
+    margin: 0;
+    list-style: none;
+    text-decoration: none;
+    user-select: none;
+    
+}
+
+ul, li {
+    padding: 0;    
+}
+
+
+
+:root {
+    /*Background Home*/
+    --bgContainer_a: rgb(241, 240, 241);
+    --bgContainer_b: rgb(1, 43, 85);
+    --bgHomecolorFilter: rgba(53, 74, 95, 0.56);
+    --bgCartElementContainer: rgba(53, 74, 95, 0.048);
+    /*Formularios*/
+    --bgColorForm: rgb(255, 255, 255);
+
+    /*Input*/
+    --bgColorInput: rgb(255, 255, 255);
+    
+    /* BannerPromo */
+    --bgPromo: rgba(242, 141, 58, 0.851);
+    --colorTextPromo: rgb(255, 255, 255);
+
+    /* Slider */
+    --bgCollection: rgb(45, 149, 150);
+    --colorTextCollection: rgb(255, 255, 255);
+
+    /* CardProduct */
+    --bgCardProduct: rgb(231, 235, 239);
+    --bgModalProduct: rgb(249, 249, 249);
+    --colorBoxShadowCardproduct: rgba(33, 34, 33, 0.115);
+    --colorTextCardPrice: rgb(128, 219, 86);
+    --colorTag: #2D9596;
+    --bgColorBoxService: #845EC2;
+    --bgColorBoxAdmin: #D65DB1;
+    --bgColorBoxCustomer: #e5e5e2;
+    --bgColorSupplier: #FF9671;
+
+    /*Backdrop*/
+    --colorbackdrop: rgba(33, 34, 33, 0.788);
+    /* Boton */
+    --colorButton: rgb(45, 149, 150);
+    --bgButtonHover: rgb(35, 105, 107);
+    --bgButtonHoverHome: rgb(45, 149, 150);
+    --bgButtonHoverHomeCard: rgba(242, 141, 58, 0.851);
+    --bgButtonCancel: rgb(246, 64, 64);
+    --bgButtonCancelHover: rgb(247, 32, 32);
+
+    /*Texto*/
+    --colorText_a: rgba(17, 49, 75, 0.882);
+    --colorText_b: rgb(246, 246, 246);
+    --colorText_c: rgb(45, 149, 150);
+    --colorText_d: rgb(255, 0, 0);
+    --colorText_e: rgb(150, 149, 149);
+    --colorText_f: rgb(29, 28, 28);
+    --colorText_g: rgb(97, 103, 121);
+    --colorText_opacity: rgba(38, 80, 115, 0.212);
+    --colorText_hover: rgb(240, 132, 245);
+
+    /*Others*/
+    --bgViolet: rgb(251, 92, 92);
+    --textViolet: rgb(152, 12, 187);
+
+    /*border*/
+    --borderContainer: rgba(154, 151, 151, 0.141);
+    --colorBorderButton: rgb(38, 80, 115);
+    --colorBorderInput: rgba(38, 80, 115, 0.353);
+
+    /*barScrollColor*/
+    --colorbar_a: rgba(45, 148, 150, 0.157);
+    --colorbar_b: rgba(33, 34, 33, 0.115);
+    --bgScrollbar: rgb(237, 240, 243);
+
+    /*Errors*/
+    --colorError: #ff3939;
+    --colorLowStock: red;
+    
+    
+}
+
+input, select{
+    height: 45px;
+    background-color: var(--bgModalProduct);    
+    outline: none;    
+    width: 100%;
+    border: 1px solid var(--colorBorderInput);
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px ;
+    -webkit-border-radius: 5px ;
+    -moz-border-radius: 5px ;
+    -ms-border-radius: 5px ;
+    -o-border-radius: 5px ;
+}
+
+label{
+    font-size: 0.9em;
+    padding: 0 5px;
+    
+}
+
+
+button{
+    height: 40px;
+    width: 80%;
+    background-color: var(--colorButton);
+    border: none;
+    color: var(--bgContainer_a);
+
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover{
+color: var(--bgContainer_a);
+background-color: var(--bgButtonHover);
+}
+
+
+img{
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    
+}
+
+.input-error{
+    border-bottom: 2px solid var(--colorError);
+}
+
+*::-webkit-scrollbar {
+    width: 5px;
+
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--colorButton);
+    border-radius: 2.5px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: var(--bgScrollbar);
+}
+
+.qr_image_title{
+    padding-top: 50px;
+}

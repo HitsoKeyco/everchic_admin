@@ -1,0 +1,51 @@
+.modal_contact_container{    
+    z-index: 4;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal_contact_backdrop{
+    z-index: 4;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.186);
+    backdrop-filter: blur(3px);
+}
+
+.modal_contact_info_container{
+    margin: 25px;
+    z-index: 5;
+    width: 100%;
+    
+    padding: 15px;
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+    background-color: var(--bgModalProduct);
+}
+
+.contact_modal_name{
+    background-color: var(--bgContainer_b);
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    color: var(--colorText_b);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+
+    margin-bottom: 5px;
+}

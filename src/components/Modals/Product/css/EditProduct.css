@@ -1,0 +1,139 @@
+.edit_product_container {
+    z-index: 99;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit_product_backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.323);
+}
+
+.edit_product_form {
+    z-index: 99;
+    width: 100%;
+    max-height: 100%;
+    background-color: var(--bgModalProduct);
+    padding: 15px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    overflow-y: auto;
+}
+
+.edit_product_title_container {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: var(--bgContainer_b);
+}
+
+.edit_product_title {
+    font-size: 1.2em;
+    padding: 5px;
+    color: var(--colorText_b);
+    padding-left: 15px;
+}
+
+.edit_product_label {
+    color: var(--colorText_a);
+    position: relative;
+    top: 10px;
+    left: 10px;
+}
+
+.edit_product_group_elements_container {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+
+}
+
+.edit_product_group_elements {
+    flex: 1;
+}
+
+.edit_product_button_container {
+    display: flex;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+.edit_product_button_cancel {
+    background-color: var(--bgButtonCancel);
+}
+
+.edit_product_button_cancel:hover {
+    background-color: var(--bgButtonCancelHover);
+}
+
+.edit_product_image_container {
+    width: 100%;
+    border-radius: 15px;
+}
+
+.edit_product_image {
+    width: 100%;
+}
+
+.edit_product_images_load_container {
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.edit_product_images_img_container {
+    width: 100%;
+    max-width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.edit_product_images {
+    width: 100%;
+    cursor: pointer;
+}
+
+.edit_product_img_msj {
+    color: var(--colorText_opacity);
+    margin: 0 auto;
+}
+
+.edit_product_icon_delete_image {
+    color: var(--colorText_a);
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.edit_product_label_container {
+    height: max-content;
+    margin-top: 15px;
+    
+}
+
+.edit_product_label{
+    background-color: var(--bgModalProduct);    
+}
+
+.edit_product_input_image {
+    margin: 10px 0;
+}
+
+.edit_product_images_border {
+    border: 1px solid var(--colorBorderInput);
+}

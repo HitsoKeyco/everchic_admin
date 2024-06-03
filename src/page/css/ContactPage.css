@@ -1,0 +1,41 @@
+.contact_page_container{
+    padding: 0 10px;
+    padding-top: 60px
+    
+}
+.contact_page_controller_user{
+    display: flex;
+    justify-content: space-between;
+}
+
+.contact_page_controllers_search_container{
+    width: 100%;
+    position: relative;
+}
+
+.contact_page_search_button{
+    position: absolute;
+    right: 5px;
+    top: 8px;
+    font-size: 1.5em;
+    color: var(--colorText_opacity);
+    cursor: pointer;
+}
+
+.contact_page_controllers_add_contact_container{
+    display: flex;
+    align-items: center;
+}
+
+.contact_page_add{
+    font-size: 1.4em;
+    padding: 0 15px;
+    color: var(--colorText_a);
+    cursor: pointer;
+}
+
+.contact_page_title{
+    font-size: 1.3em;
+    padding-left: 10px;
+    color: var(--colorText_a);
+}
