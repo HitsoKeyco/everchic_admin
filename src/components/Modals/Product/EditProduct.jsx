@@ -4,14 +4,11 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
-
-import dataInit from "../../../hooks/data/dataInit";
-import editProductApi from "../../../hooks/products/updateProductApi";
-import { addProductThunk, getAllProductThunk, updateProductThunk } from "../../../store/slices/products.slice";
+import { updateProductThunk } from "../../../store/slices/products.slice";
 
 
 const EditProduct = ({ product, setIsModalEditProduct }) => {
-
+    console.log(product);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [tags, setTags] = useState(product.tags);
     const [tagsIdDelete, setTagsIdDelete] = useState([])
@@ -192,18 +189,33 @@ const EditProduct = ({ product, setIsModalEditProduct }) => {
 
                     {/*------------------------------\\ SKU //-----------------------------------*/}
                     <div className="">
-                        <div className=''>
-                            <label className="edit_product_label" htmlFor="sku">
-                                SKU:
-                            </label>
-                            <input
-                                type="text"
-                                id="sku"
-                                name="sku"
-                                defaultValue={product.sku}
-                                className={`edit_product_input ${errors.sku ? 'input-error' : ''}`}
-                                {...register('sku', { required: 'Este campo es obligatorio' })}
-                            />
+                        <div className="edit_product_group_elements_container">
+                            <div className='edit_product_sku_container'>
+                                <label className="edit_product_label" htmlFor="sku">
+                                    SKU:
+                                </label>
+                                <input
+                                    type="text"
+                                    id="sku"
+                                    name="sku"
+                                    defaultValue={product.sku}
+                                    className={`edit_product_input ${errors.sku ? 'input-error' : ''}`}
+                                    {...register('sku', { required: 'Este campo es obligatorio' })}
+                                />
+                            </div>
+                            <div className='edit_product_check_container'>
+                                <label className="edit_product_label_check" htmlFor="new_product">
+                                    NP:
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    id="new_product"
+                                    name="edit_procuct_new_product_check"
+                                    defaultChecked={product.new_product}
+                                    className={`edit_procuct_new_product_check ${errors.new_product ? 'input-error' : ''}`}
+                                    {...register('new_product')}
+                                />
+                            </div>
                         </div>
                         {/*------------------------------\\ Title //-----------------------------------*/}
                         <div className=''>
@@ -397,7 +409,7 @@ const EditProduct = ({ product, setIsModalEditProduct }) => {
                                 className="edit_product_button_edit"
                                 type="submit"
                             >
-                                Agregar
+                                Actualizar
                             </button>
 
                             <button

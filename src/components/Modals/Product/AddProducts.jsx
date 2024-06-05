@@ -6,6 +6,7 @@ import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { addProductThunk } from "../../../store/slices/products.slice";
 
+
 const AddProducts = ({ setIsModalProduct }) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -87,7 +88,7 @@ const AddProducts = ({ setIsModalProduct }) => {
     };
 
 
-    const submit = async (data) => {
+    const submit = async (data) => {        
         dispatch(addProductThunk(data, tags, imageFiles))
         setIsModalProduct(false);
     };
@@ -160,17 +161,31 @@ const AddProducts = ({ setIsModalProduct }) => {
 
                     {/*------------------------------\\ SKU //-----------------------------------*/}
                     <div className="">
-                        <div className=''>
-                            <label className="add_product_label" htmlFor="sku">
-                                SKU:
-                            </label>
-                            <input
-                                type="text"
-                                id="sku"
-                                name="sku"
-                                className={`add_product_input ${errors.sku ? 'input-error' : ''}`}
-                                {...register('sku', { required: 'Este campo es obligatorio' })}
-                            />
+                        <div className="add_product_group_elements_container">
+                            <div className='add_product_sku_container'>
+                                <label className="add_product_label" htmlFor="sku">
+                                    SKU:
+                                </label>
+                                <input
+                                    type="text"
+                                    id="sku"
+                                    name="sku"
+                                    className={`add_product_input ${errors.sku ? 'input-error' : ''}`}
+                                    {...register('sku', { required: 'Este campo es obligatorio' })}
+                                />
+                            </div>
+                            <div className='add_product_check_container'>
+                                <label className="add_product_label_check" htmlFor="new_product">
+                                    NP:
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    id="new_product"
+                                    name="add_procuct_new_product_check"
+                                    className={`add_procuct_new_product_check ${errors.new_product ? 'input-error' : ''}`}
+                                    {...register('new_product')}
+                                />
+                            </div>
                         </div>
                         {/*------------------------------\\ Title //-----------------------------------*/}
                         <div className=''>
@@ -181,7 +196,7 @@ const AddProducts = ({ setIsModalProduct }) => {
                                 type="text"
                                 id="title"
                                 name="title"
-                                defaultValue='Calcetín de '
+                                placeholder='Ejemplo: Bob Esponja'                                
                                 className={`add_product_input ${errors.title ? 'input-error' : ''}`}
                                 {...register('title', { required: 'Este campo es obligatorio' })}
                             />

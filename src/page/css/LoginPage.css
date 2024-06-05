@@ -1,9 +1,12 @@
+
+
 .login_page_container{
     height: 100vh;
     width: 100%;
-    background-image: url('../img/home.jpg');
+    background-image: url('/img/home.webp');
     background-position: center;    
     background-size:cover;
+    
 
     display: flex;
     justify-content: center;

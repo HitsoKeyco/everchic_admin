@@ -66,6 +66,7 @@ export const getAllProductThunk = () => (dispatch) => {
 
 
 // ------------------------- Thunks  Add product --------------------------------//
+
 export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
     const dataProduct = {
         ...data,
@@ -76,15 +77,15 @@ export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
     };
 
     try {
-
         // Agregar el producto
         const productResponse = await axios.post(`${apiUrl}/products`, dataProduct, getConfigAuth());
         const productId = productResponse.data.id;
 
         // Subir imágenes y obtener los IDs
         const imageUploadPromises = imageFiles.map(async (imageFile) => {
+            const webpImage = await convertImageToWebP(imageFile);
             const formData = new FormData();
-            formData.append('image', imageFile);
+            formData.append('image', webpImage, `${imageFile.name.split('.')[0]}.webp`);
             const imageResponse = await axios.post(`${apiUrl}/product_images`, formData, getConfigAuth());
             return imageResponse.data.id;
         });
@@ -103,13 +104,39 @@ export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
             const urlTags = `${apiUrl}/tags/${productId}/relateTags`;
             await axios.post(urlTags, tags, getConfigAuth());
         }
-        dispatch(getAllProductThunk())
+
+        // Despachar acción para obtener todos los productos
+        dispatch(getAllProductThunk());
     } catch (error) {
         console.error('Error al agregar el producto:', error);
         // Maneja los errores aquí
     }
 };
 
+
+
+//---convert to WebP
+async function convertImageToWebP(imageFile) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          canvas.toBlob((blob) => {
+            resolve(blob);
+          }, 'image/webp');
+        };
+        img.src = event.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(imageFile);
+    });
+  }
 
 
 // ------------------------- Update Product --------------------------------//

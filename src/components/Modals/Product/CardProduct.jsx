@@ -29,7 +29,7 @@ const CardProduct = ({ product }) => {
         dispatch(deleteProducts(product.id))
     }
 
-
+    
 
     return (
         <>
