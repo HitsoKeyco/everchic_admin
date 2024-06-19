@@ -17,7 +17,7 @@ const CardProduct = ({ product }) => {
     const handleModal = () => {
         setIsModalProduct(true)
     }
-    
+
 
     const handleEditProduct = (e) => {
         e.stopPropagation();
@@ -25,21 +25,20 @@ const CardProduct = ({ product }) => {
     }
 
     const handleDeleteproduct = (e) => {
-        e.stopPropagation();        
+        e.stopPropagation();
         dispatch(deleteProducts(product.id))
     }
 
-    
 
     return (
         <>
             <div className="card_product_container" onClick={handleModal}>
                 <div className="card_product_img_container">
                     {product.productImgs && product.productImgs.length > 0 ? (
-                        <img className='card_product_img' src={product.productImgs[0].url} alt="" />
+                        <img className='card_product_img' src={product.productImgs[0].url_small} alt="" />
                     ) : (
 
-                        <Skeleton                            
+                        <Skeleton
                             variant="rectangular"
                             width={115}
                             height="100%"
@@ -50,12 +49,14 @@ const CardProduct = ({ product }) => {
                     <ul>
                         <li className='card_product_li card_product_li_title'>{product?.title}</li>
                         <li className='card_product_li'>Categoria: {product.category?.name}</li>
-                        <li className='card_product_li'>Stock: {product?.stock}</li>
+                        {
+                            product.stock < 6 ?
+                                <li className='card_product_li  card_product_low_stock'>Stock: {product.stock}</li>
+                                :
+                                <li className='card_product_li'>Stock: {product.stock}</li>
+                        }
                         <li className='card_product_li'>Coleccion: {product.collection?.name}</li>
                         <li className='card_product_li'>Talla: {product.size?.size}</li>
-                        {
-                            product.stock < 6 && <li className='card_product_li card_product_li_stock card_product_low_stock'>Stock: {product.stock}</li>
-                        }
                     </ul>
 
                 </div>

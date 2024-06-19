@@ -134,7 +134,7 @@ const EditProduct = ({ product, setIsModalEditProduct }) => {
                     <div className="edit_product_image_container">
                         {selectedImages &&
                             <img
-                                src={selectedImages.url || URL.createObjectURL(selectedImages)}
+                                src={selectedImages.url_small || URL.createObjectURL(selectedImages)}
                                 alt="Imagen seleccionada"
                                 className="edit_product_image"
                             />
@@ -151,7 +151,7 @@ const EditProduct = ({ product, setIsModalEditProduct }) => {
                             imageFiles.map((image, index) => (
                                 <div key={index} className="edit_product_images_img_container">
                                     <img
-                                        src={image.url || URL.createObjectURL(image)}
+                                        src={image.url_small || URL.createObjectURL(image)}
                                         alt={`Miniatura ${index + 1}`}
                                         className={`edit_product_images ${selectedImages === image && "edit_product_images_border"}`}
                                         onClick={() => handleThumbnailClick(index)}

@@ -58,6 +58,7 @@
 }
 
 .card_product_low_stock{
+    height: max-content;
     width: max-content;
     background-color: var(--colorLowStock);
     text-align: center;

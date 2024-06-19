@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import getConfigAuth from "../../utils/getConfigAuth";
+import Resizer from 'react-image-file-resizer';
 
 const products = createSlice({
     name: 'products',
@@ -53,16 +54,17 @@ export default products.reducer;
 const apiUrl = import.meta.env.VITE_API_URL;
 
 // ------------------------- Thunks Get all products --------------------------------//
-export const getAllProductThunk = () => (dispatch) => {
-    axios.get(`${apiUrl}/products`, getConfigAuth())
-        .then(res => {
-            dispatch(allProducts(res.data))
+// export const getAllProductThunk = () => (dispatch) => {
+//     axios.get(`${apiUrl}/products`, getConfigAuth())
+//         .then(res => {
+            
+//             dispatch(allProducts(res.data))
 
-        })
-        .catch(err => {
-            console.log('No se ha encontrado los productos', err);
-        })
-}
+//         })
+//         .catch(err => {
+//             console.log('No se ha encontrado los productos', err);
+//         })
+// }
 
 
 // ------------------------- Thunks  Add product --------------------------------//
@@ -81,19 +83,32 @@ export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
         const productResponse = await axios.post(`${apiUrl}/products`, dataProduct, getConfigAuth());
         const productId = productResponse.data.id;
 
-        // Subir imágenes y obtener los IDs
+        // Subir imágenes y obtener los IDs y URLs
         const imageUploadPromises = imageFiles.map(async (imageFile) => {
-            const webpImage = await convertImageToWebP(imageFile);
-            const formData = new FormData();
-            formData.append('image', webpImage, `${imageFile.name.split('.')[0]}.webp`);
-            const imageResponse = await axios.post(`${apiUrl}/product_images`, formData, getConfigAuth());
-            return imageResponse.data.id;
+            const smallImage = await resizeAndConvertImage(imageFile, 500, 500);
+            const mediumImage = await resizeAndConvertImage(imageFile, 1500, 1500);
+
+            // Subir la imagen pequeña y la imagen mediana
+            const formDataImage = new FormData();
+            formDataImage.append('smallImage', smallImage, `${imageFile.name.split('.')[0]}-small.webp`);
+            formDataImage.append('mediumImage', mediumImage, `${imageFile.name.split('.')[0]}-medium.webp`);
+            formDataImage.append('productId', productId);
+
+            // Subir el FormData con ambas imágenes
+            const imageResponse = await axios.post(`${apiUrl}/product_images`, formDataImage, {
+                ...getConfigAuth(),
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            return imageResponse.data;
         });
 
-        const imageIds = await Promise.all(imageUploadPromises);
+        const imageInfos = await Promise.all(imageUploadPromises);
 
-        // Asociar imágenes con el producto
-        await axios.post(`${apiUrl}/products/${productId}/images`, imageIds, getConfigAuth());
+        // // Asociar imágenes con el producto
+        // await axios.post(`${apiUrl}/products/${productId}/images`, imageInfos.map(info => info.id), getConfigAuth());
 
         // Asociar talla con el producto
         const productSize = { productId, sizeId: dataProduct.sizeId };
@@ -114,64 +129,43 @@ export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
 };
 
 
-
-//---convert to WebP
-async function convertImageToWebP(imageFile) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          canvas.toBlob((blob) => {
-            resolve(blob);
-          }, 'image/webp');
-        };
-        img.src = event.target.result;
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(imageFile);
-    });
-  }
-
-
 // ------------------------- Update Product --------------------------------//
 export const updateProductThunk = (productId, data, imgtoToLoad, imageIdsToDelete, tags, tagsIdDelete) => async (dispatch) => {
-
     try {
-        // Ingresamos actualizacion texto plano
-        const res = await axios.put(`${apiUrl}/products/${productId}`, data, getConfigAuth())
+        // Actualizar datos del producto
+        await axios.put(`${apiUrl}/products/${productId}`, data, getConfigAuth());
 
         // Subir imágenes y obtener los IDs
         const imageUploadPromises = imgtoToLoad.map(async (imageFile) => {
-            const formData = new FormData();
-            formData.append('image', imageFile);
-            const imageResponse = await axios.post(`${apiUrl}/product_images`, formData, getConfigAuth());
-            return imageResponse.data.id;
+            const smallImage = await resizeAndConvertImage(imageFile, 500, 500);
+            const mediumImage = await resizeAndConvertImage(imageFile, 1500, 1500);
+
+            // Crear FormData con ambas imágenes
+            const formDataImage = new FormData();
+            formDataImage.append('smallImage', smallImage, `${imageFile.name.split('.')[0]}-small.webp`);
+            formDataImage.append('mediumImage', mediumImage, `${imageFile.name.split('.')[0]}-medium.webp`);
+            formDataImage.append('productId', productId);
+
+            // Subir el FormData con ambas imágenes
+            const imageResponse = await axios.post(`${apiUrl}/product_images`, formDataImage, {
+                ...getConfigAuth(),
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            return imageResponse.data;
         });
 
-        const imageIds = await Promise.all(imageUploadPromises);
+        await Promise.all(imageUploadPromises);
 
-        // Asociar imágenes con el producto
-        await axios.post(`${apiUrl}/products/${productId}/images`, imageIds, getConfigAuth());
-
-        const idsImgDelete = { ids: imageIdsToDelete };
+        // Eliminar imágenes
         if (imageIdsToDelete.length > 0) {
-            axios.delete(`${apiUrl}/product_images/remove`, {
+            const idsImgDelete = { ids: imageIdsToDelete };
+            await axios.delete(`${apiUrl}/product_images/remove`, {
                 data: idsImgDelete,  // Pasar los datos en la opción 'data'
                 ...getConfigAuth()  // También incluye las opciones de configuración de autenticación si es necesario
-            })
-                .then(res => {
-                    console.log(res.data);
-                    dispatch(getAllProductThunk())
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+            });
         }
 
         // Relacionar etiquetas con el producto
@@ -180,48 +174,64 @@ export const updateProductThunk = (productId, data, imgtoToLoad, imageIdsToDelet
             await axios.post(urlTags, tags, getConfigAuth());
         }
 
-        //Eliminar tags         
-        const idsTagsDelete = { ids: tagsIdDelete };
+        // Eliminar etiquetas
         if (tagsIdDelete.length > 0) {
-            axios.delete(`${apiUrl}/tags/remove/${productId}`, {
+            const idsTagsDelete = { ids: tagsIdDelete };
+            await axios.delete(`${apiUrl}/tags/remove/${productId}`, {
                 data: idsTagsDelete,  // Pasar los datos en la opción 'data'
                 ...getConfigAuth()  // También incluye las opciones de configuración de autenticación si es necesario
-            })
-                .then(res => {
-                    console.log(res.data);
-                    dispatch(getAllProductThunk())
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+            });
         }
 
-        dispatch(getAllProductThunk())
+        // Despachar acción para obtener todos los productos
+        dispatch(getAllProductThunk());
     } catch (error) {
-        console.log('Hubo un problema al actulizar el producto');
+        console.error('Hubo un problema al actualizar el producto:', error);
+        // Manejar los errores aquí
     }
+};
 
-
-}
 
 // ------------------------- Delete Product --------------------------------//
 
-export const deleteProducts = ( idProduct ) => ( dispatch ) =>  {
-    if(idProduct){         
+export const deleteProducts = (idProduct) => (dispatch) => {
+    if (idProduct) {
         axios.delete(`${apiUrl}/products/${idProduct}`, getConfigAuth())
-        .then(res => {
-            // console.log('producto eliminado exitosamente', res.data);
-            dispatch(getAllProductThunk())
-        })
-        .catch(err => {
-            console.log('existio un problema en la eliminacion del producto', err);
-        })
+            .then(res => {
+                // console.log('producto eliminado exitosamente', res.data);
+                dispatch(getAllProductThunk())
+            })
+            .catch(err => {
+                console.log('existio un problema en la eliminacion del producto', err);
+            })
 
 
-    }else{  
+    } else {
         console.log('No existe el id del producto');
     }
 }
 
+
+//-------------------- Resize de Img to webP -------------------
+async function resizeAndConvertImage(imageFile, width, height) {
+    return new Promise((resolve, reject) => {
+        Resizer.imageFileResizer(
+            imageFile,
+            width,
+            height,
+            'WEBP',
+            80,
+            0,
+            (uri) => {
+                // Convertir el URI a Blob
+                fetch(uri)
+                    .then(res => res.blob())
+                    .then(blob => resolve(blob))
+                    .catch(error => reject(error));
+            },
+            'base64' // Formato de salida
+        );
+    });
+}
 
 

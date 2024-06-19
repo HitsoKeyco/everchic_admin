@@ -42,3 +42,11 @@
     padding-left: 10px;
     color: var(--colorText_a);
 }
+
+.inventory_page_control_pagination_container{
+    width: 100%;
+    
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}

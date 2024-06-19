@@ -170,6 +170,7 @@ const AddProducts = ({ setIsModalProduct }) => {
                                     type="text"
                                     id="sku"
                                     name="sku"
+                                    defaultValue='SP100'
                                     className={`add_product_input ${errors.sku ? 'input-error' : ''}`}
                                     {...register('sku', { required: 'Este campo es obligatorio' })}
                                 />
@@ -196,6 +197,7 @@ const AddProducts = ({ setIsModalProduct }) => {
                                 type="text"
                                 id="title"
                                 name="title"
+                                defaultValue='Spiderman'
                                 placeholder='Ejemplo: Bob Esponja'                                
                                 className={`add_product_input ${errors.title ? 'input-error' : ''}`}
                                 {...register('title', { required: 'Este campo es obligatorio' })}
@@ -224,6 +226,7 @@ const AddProducts = ({ setIsModalProduct }) => {
                                 <input
                                     type="number"
                                     id="stock"
+                                    defaultValue='30'
                                     name="stock"
                                     className={`add_product_input ${errors.stock ? 'input-error' : ''}`}
                                     {...register('stock', { required: 'Este campo es obligatorio' })}
@@ -238,6 +241,7 @@ const AddProducts = ({ setIsModalProduct }) => {
                                     type="number"
                                     id="weight"
                                     name="weight"
+                                    defaultValue='0.040'
                                     step="0.01"
                                     className={`add_product_input ${errors.weight ? 'input-error' : ''}`}
                                     {...register('weight', { required: 'Este campo es obligatorio' })}
@@ -252,6 +256,7 @@ const AddProducts = ({ setIsModalProduct }) => {
                                     type="number"
                                     id="cost_price"
                                     name="cost_price"
+                                    defaultValue='2.22'
                                     step="0.01"
                                     className={`add_product_input ${errors.cost_price ? 'input-error' : ''}`}
                                     {...register('cost_price', { required: 'Este campo es obligatorio' })}
@@ -290,7 +295,7 @@ const AddProducts = ({ setIsModalProduct }) => {
                                     className={`add_product_select ${errors.sizeId ? 'input-error' : ''}`}
                                     {...register('sizeId', { required: 'Este campo es obligatorio' })}
                                 >
-                                    <option value="" defaultValue >Seleccione uno</option>
+                                    {/* <option value="" defaultValue >Seleccione uno</option> */}
                                     {sizes?.map((size) => (
                                         <option key={size.id} value={size.id}>
                                             {size.size}
@@ -309,7 +314,7 @@ const AddProducts = ({ setIsModalProduct }) => {
                                     className={`add_product_select ${errors.collectionId ? 'input-error' : ''}`}
                                     {...register('collectionId', { required: 'Este campo es obligatorio' })}
                                 >
-                                    <option value="" defaultValue >Seleccione uno</option>
+                                    {/* <option value="" defaultValue >Seleccione uno</option> */}
                                     {collections?.map((collection) => (
                                         <option key={collection.id} value={collection.id}>
                                             {collection.name}
@@ -331,7 +336,7 @@ const AddProducts = ({ setIsModalProduct }) => {
                                     className={`add_product_select ${errors.categoryId ? 'input-error' : ''}`}
                                     {...register('categoryId', { required: 'Este campo es obligatorio' })}
                                 >
-                                    <option value="" defaultValue >Seleccione uno</option>
+                                    {/* <option value="" defaultValue >Seleccione uno</option> */}
                                     {categories?.map((category) => (
                                         <option key={category.id} value={category.id}>
                                             {category.name}
@@ -351,9 +356,9 @@ const AddProducts = ({ setIsModalProduct }) => {
                                     className={`add_product_select ${errors.supplierId ? 'input-error' : ''}`}
                                     {...register('supplierId', { required: 'Este campo es obligatorio' })}
                                 >
-                                    <option value="" defaultValue >Seleccione uno</option>
+                                    {/* <option value="" defaultValue >Seleccione uno</option> */}
                                     {suppliers?.map((supplier) => (
-                                        <option key={supplier.id} value={supplier.id}>
+                                        <option key={supplier.id} value={supplier.id} >
                                             {supplier.company}
                                         </option>
                                     ))}

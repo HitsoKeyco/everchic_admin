@@ -36,7 +36,7 @@ function Slider({ product }) {
                             <img
                                 key={index}
                                 className={`slide ${index === currentSlide ? 'active' : 'inactive'}`}
-                                src={slide?.url}
+                                src={slide?.url_medium}
                                 alt={`Slide ${index}`}
                             />
                         </motion.div>

@@ -55,13 +55,13 @@ ul, li {
     --bgButtonHoverHome: rgb(45, 149, 150);
     --bgButtonHoverHomeCard: rgba(242, 141, 58, 0.851);
     --bgButtonCancel: rgb(246, 64, 64);
-    --bgButtonCancelHover: rgb(247, 32, 32);
+    --bgButtonCancelHover: rgb(244, 104, 104);
 
     /*Texto*/
     --colorText_a: rgba(17, 49, 75, 0.882);
     --colorText_b: rgb(246, 246, 246);
     --colorText_c: rgb(45, 149, 150);
-    --colorText_d: rgb(255, 0, 0);
+    --colorText_d: rgb(247, 58, 58);
     --colorText_e: rgb(150, 149, 149);
     --colorText_f: rgb(29, 28, 28);
     --colorText_g: rgb(97, 103, 121);
@@ -83,8 +83,8 @@ ul, li {
     --bgScrollbar: rgb(237, 240, 243);
 
     /*Errors*/
-    --colorError: #ff3939;
-    --colorLowStock: red;
+    --colorError: rgb(244, 104, 104);
+    --colorLowStock: rgb(244, 104, 104);
     
     
 }
