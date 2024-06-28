@@ -1,10 +1,12 @@
 import React from 'react'
-import QrImage from '../components/QrImage'
-
+import './css/ConfigPage.css'
+import QrImage from '../components/Qr/QrImage'
 const ConfigPage = () => {
   return (
     <>
-    <QrImage/>
+      <div className="config_page_container">        
+        <QrImage />
+      </div>
     </>
   )
 }

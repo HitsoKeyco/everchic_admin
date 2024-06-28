@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.15.20",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@reduxjs/toolkit": "2.2.5",
     "axios": "1.7.2",
     "framer-motion": "11.2.10",
@@ -25,6 +26,7 @@
     "react-router-dom": "6.23.1",
     "react-tagsinput": "3.20.3",
     "socket.io-client": "4.7.5",
+    "styled-components": "^6.1.11",
     "sweetalert2": "^11.6.13",
     "sweetalert2-react-content": "5.0.7"
   },

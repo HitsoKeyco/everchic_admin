@@ -47,7 +47,7 @@ const InventoryPage = () => {
 
     const limit = 10; //cantidad de productos
 
-    console.log(pagination.currentPage);
+    
 
     useEffect(() => {
         axios.get(`${apiUrl}/products?page=${pagination.currentPage}&limit=${limit}`)
