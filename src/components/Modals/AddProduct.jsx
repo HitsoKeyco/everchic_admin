@@ -14,7 +14,7 @@ const AddProduct = ({ setIsModalCreate, setUpdate }) => {
   const MySwal = withReactContent(Swal);
   const apiUrl = import.meta.env.VITE_API_URL;
   const { supplierAPI, getSupplier, categoryAPI, getCategory, sizeAPI, getsize, collectionAPI, getCollection } = getApiProducts();
-
+  
   const { register, handleSubmit, formState: { errors, isSubmitted } } = useForm();
   const [tags, setTags] = useState([]);
   const [selectedImages, setSelectedImage] = useState(null);
@@ -25,12 +25,12 @@ const AddProduct = ({ setIsModalCreate, setUpdate }) => {
     setIsModalCreate(false);
   }
 
-  useEffect(() => {
-    getSupplier()
-    getCategory()
-    getsize()
-    getCollection()
-  }, [])
+  // useEffect(() => {
+  //   getSupplier()
+  //   getCategory()
+  //   getsize()
+  //   getCollection()
+  // }, [])
 
   useEffect(() => {
     // Esta función se ejecuta cuando imageFile cambia

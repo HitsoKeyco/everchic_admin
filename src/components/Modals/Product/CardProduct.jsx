@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import ModalProduct from './ModalProduct';
 import './css/CardProduct.css'
-import EditProduct from './EditProduct';
 import Skeleton from 'react-loading-skeleton';
 import { deleteProducts } from '../../../store/slices/products.slice';
 import { useDispatch } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 const CardProduct = ({ product }) => {
     // ---- Hooks -----
@@ -12,21 +11,21 @@ const CardProduct = ({ product }) => {
     const [isModalEditproduct, setIsModalEditProduct] = useState(false);
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     // ---- Handle modal -----
     const handleModal = () => {
         setIsModalProduct(true)
     }
 
-
-    const handleEditProduct = (e) => {
-        e.stopPropagation();
-        setIsModalEditProduct(true)
-    }
-
     const handleDeleteproduct = (e) => {
         e.stopPropagation();
         dispatch(deleteProducts(product.id))
+    }
+
+    const handleEditProducts = (e) => {
+        e.stopPropagation();
+        navigate(`/edit_product/${product.id}`)
     }
 
 
@@ -58,20 +57,15 @@ const CardProduct = ({ product }) => {
                         <li className='card_product_li'>Coleccion: {product.collection?.name}</li>
                         <li className='card_product_li'>Talla: {product.size?.size}</li>
                     </ul>
-
                 </div>
                 <div className="card_product_actions">
-                    <i className='bx bxs-edit card_product_button_edit' onClick={handleEditProduct}></i>
+                    {
+                        product.deleted_at && <i class='bx bxs-hide card_product_button_hidden'></i>
+                    }
+                    <i className='bx bxs-edit card_product_button_edit' onClick={handleEditProducts}></i>
                     <i className='bx bxs-trash card_product_button_delete' onClick={handleDeleteproduct}></i>
                 </div>
-
             </div>
-            {
-                isModalproduct && <ModalProduct product={product} setIsModalProduct={setIsModalProduct} />
-            }
-            {
-                isModalEditproduct && <EditProduct product={product} setIsModalEditProduct={setIsModalEditProduct} />
-            }
         </>
     )
 }

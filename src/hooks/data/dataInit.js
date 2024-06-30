@@ -13,7 +13,7 @@ const dataInit = () => {
 
     /*----------------- Products-----------------------*/
     const getAllProducts = () => {
-        const path = '/products/'
+        const path = '/products'
         axios.get((url + path), getConfigAuth())
             .then(res => {
                 dispatch(allProducts(res.data))
@@ -25,10 +25,10 @@ const dataInit = () => {
 
     /*----------------- Categorias productos-----------------------*/
     const getAllCategoriesProducts = () => {
-        const path = '/categories/'
+        const path = '/categories'
         axios.get((url + path), getConfigAuth())
             .then(res => {
-                dispatch(allCategoriesProducts(res.data))
+                // dispatch(allCategoriesProducts(res.data))
             })
             .catch(err => {
                 console.log('getAllCategoriesProducts', err);
@@ -37,7 +37,7 @@ const dataInit = () => {
 
     /*----------------- Tags -----------------------*/
     const getAllTags = () => {
-        const path = '/tags/'
+        const path = '/tags'
         axios.get((url + path), getConfigAuth())
             .then(res => {
                 dispatch(allTags(res.data))
@@ -49,7 +49,7 @@ const dataInit = () => {
 
     /*----------------- Suppliers -----------------------*/
     const getAllSuppliers = () => {
-        const path = '/suppliers/'
+        const path = '/suppliers'
         axios.get((url + path), getConfigAuth())
             .then(res => {
                 dispatch(allSuppliers(res.data))
@@ -61,7 +61,7 @@ const dataInit = () => {
 
     /*----------------- Sizes -----------------------*/
     const getAllSizes = () => {
-        const path = '/sizes/'
+        const path = '/sizes'
         axios.get((url + path), getConfigAuth())
             .then(res => {
                 dispatch(allSizes(res.data))
@@ -73,7 +73,7 @@ const dataInit = () => {
 
     /*----------------- Collections -----------------------*/
     const getAllCollections = () => {
-        const path = '/collections/'
+        const path = '/collections'
         axios.get((url + path), getConfigAuth())
             .then(res => {
                 dispatch(allCollections(res.data))

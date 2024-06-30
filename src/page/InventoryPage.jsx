@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import './css/Inventory.css'
-import AddProducts from '../components/Modals/Product/AddProducts'
 import dataInit from '../hooks/data/dataInit'
 import CardProduct from '../components/Modals/Product/CardProduct'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,35 +7,19 @@ import { allProducts } from '../store/slices/products.slice'
 import axios from 'axios'
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom'
+import getConfigAuth from '../utils/getConfigAuth'
 
 
 const InventoryPage = () => {
 
     const apiUrl = import.meta.env.VITE_API_URL;
-    const [isModalProduct, setIsModalProduct] = useState(false)
+    
     const [isSearchProduct, setIsSearchProduct] = useState('')
 
-    /* ----------------- Carga de funciones esenciales -----------------------*/
-    const { getAllProducts, getAllCategoriesProducts, getAllTags, getAllSuppliers, getAllSizes, getAllCollections } = dataInit()
+    /* ----------------- Carga de funciones esenciales -----------------------*/    
     const dispatch = useDispatch()
-    const products = useSelector(state => state.products.productsStore)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await Promise.all([
-                    getAllCategoriesProducts(),
-                    getAllTags(),
-                    getAllSuppliers(),
-                    getAllSizes(),
-                    getAllCollections(),
-                ]);
-            } catch (err) {
-                console.log('No se cargado los datos iniciales');
-            }
-        }
-        fetchData();
-    }, [])
+    
 
     const [productsAPI, setProductsAPI] = useState([]);
     const [pagination, setPagination] = useState({
@@ -45,12 +28,10 @@ const InventoryPage = () => {
         totalPages: 0
     });
 
-    const limit = 10; //cantidad de productos
-
-    
+    const limit = 5; //cantidad de productos
 
     useEffect(() => {
-        axios.get(`${apiUrl}/products?page=${pagination.currentPage}&limit=${limit}`)
+        axios.get(`${apiUrl}/products/admin?page=${pagination.currentPage}&limit=${limit}`, getConfigAuth())
             .then(res => {
                 const { total, currentPage, totalPages, products } = res.data;
                 setPagination({ total, currentPage, totalPages });
@@ -74,8 +55,10 @@ const InventoryPage = () => {
             console.log("No se puede ir a una página negativa o fuera de rango");
         }
     };
+    const navigate = useNavigate()
+
     const handleAddProduct = () => {
-        setIsModalProduct(true)
+        navigate('/add_product')
     }
 
     return (
@@ -99,7 +82,7 @@ const InventoryPage = () => {
                     </div>
                 </div>
                 {
-                    products?.map(product => (
+                    productsAPI?.map(product => (
                         <div
                             className="inventory_page_product_container"
                             key={product.id}
@@ -111,9 +94,9 @@ const InventoryPage = () => {
 
             </div>
             <div className='inventory_page_control_pagination_container'>
-            <Stack spacing={2}>
+                <Stack spacing={2}>
                     <Pagination
-                        count={pagination.totalPages - 1}
+                        count={pagination.totalPages}
                         page={parseInt(pagination.currentPage)}
                         onChange={handleChangePage}
                         variant="outlined"
@@ -121,11 +104,6 @@ const InventoryPage = () => {
                     />
                 </Stack>
             </div>
-            {
-                isModalProduct && <AddProducts setIsModalProduct={setIsModalProduct} />
-            }
-
-
         </>
     )
 }

@@ -53,21 +53,71 @@ export default products.reducer;
 // ------------------------- Thunks --------------------------------//
 const apiUrl = import.meta.env.VITE_API_URL;
 
-// ------------------------- Thunks Get all products --------------------------------//
-// export const getAllProductThunk = () => (dispatch) => {
-//     axios.get(`${apiUrl}/products`, getConfigAuth())
-//         .then(res => {
-            
-//             dispatch(allProducts(res.data))
+//------------------------- Thunks Get all products --------------------------------//
+export const getAllProductThunk = () => (dispatch) => {
+    axios.get(`${apiUrl}/products`, getConfigAuth())
+        .then(res => {
+            dispatch(allProducts(res.data))
+        })
+        .catch(err => {
+            console.log('No se ha encontrado los productos', err);
+        })
+}
 
-//         })
-//         .catch(err => {
-//             console.log('No se ha encontrado los productos', err);
-//         })
-// }
+//------------------------- Thunks Get All categories --------------------------------//
+
+export const allCategoriesProductsThunk = () => (dispatch) => {
+    axios.get(`${apiUrl}/categories`, getConfigAuth())
+        .then(res => {
+            dispatch(allCategoriesProducts(res.data))
+        })
+        .catch(err => {
+            console.log('error en la consulta de categorias', err);
+        })
+
+}
+
+//------------------------- Thunks Get All Sizes --------------------------------//
+
+export const allSizesProductsThunk = () => (dispatch) => {
+    axios.get(`${apiUrl}/sizes`, getConfigAuth())
+        .then(res => {
+            dispatch(allSizes(res.data))
+        })
+        .catch(err => {
+            console.log('error en la consulta de sizes', err);
+        })
+
+}
+
+//------------------------- Thunks Get All Sizes --------------------------------//
+
+export const allCollectionProductsThunk = () => (dispatch) => {
+    axios.get(`${apiUrl}/collections`, getConfigAuth())
+        .then(res => {
+            dispatch(allCollections(res.data))
+        })
+        .catch(err => {
+            console.log('error en la consulta de sizes', err);
+        })
+
+}
+//------------------------- Thunks Get All Sizes --------------------------------//
+
+export const allSupplierProductsThunk = () => (dispatch) => {
+    axios.get(`${apiUrl}/suppliers`, getConfigAuth())
+        .then(res => {
+            dispatch(allSuppliers(res.data))
+        })
+        .catch(err => {
+            console.log('error en la consulta de sizes', err);
+        })
+
+}
 
 
-// ------------------------- Thunks  Add product --------------------------------//
+
+//------------------------- Thunks  Add product --------------------------------//
 
 export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
     const dataProduct = {
@@ -122,6 +172,7 @@ export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
 
         // Despachar acción para obtener todos los productos
         dispatch(getAllProductThunk());
+        return true;
     } catch (error) {
         console.error('Error al agregar el producto:', error);
         // Maneja los errores aquí
@@ -185,6 +236,7 @@ export const updateProductThunk = (productId, data, imgtoToLoad, imageIdsToDelet
 
         // Despachar acción para obtener todos los productos
         dispatch(getAllProductThunk());
+        return true;
     } catch (error) {
         console.error('Hubo un problema al actualizar el producto:', error);
         // Manejar los errores aquí
