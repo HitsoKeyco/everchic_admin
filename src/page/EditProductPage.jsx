@@ -201,6 +201,9 @@ const EditProductPage = () => {
     })
   };
 
+  const handleNavigateExit = () => {
+    navigate('/inventory');
+  }
 
   // Inicializar los valores cuando el producto esté disponible
   useEffect(() => {
@@ -672,7 +675,7 @@ const EditProductPage = () => {
                   <Button
                     variant="contained"
                     color="secondary"
-                    onClick={handleNavigate}
+                    onClick={handleNavigateExit}
                   >
                     SALIR
                   </Button>

@@ -8,6 +8,7 @@ import { addProductThunk, allCategoriesProductsThunk, allCollectionProductsThunk
 import { useNavigate } from "react-router-dom";
 import { Alert, Box, Button, Checkbox, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Swal from "sweetalert2";
 
 const AddProductPage = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -109,8 +110,21 @@ const AddProductPage = () => {
   };
 
   const handleNavigate = () => {
-    // navigate('/inventory');
+    Swal.fire({
+      title: 'Producto ingresado',
+      text: 'El producto se ha agregado correctamente',
+      icon: 'success',
+      confirmButtonText: 'Aceptar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate('/inventory');
+      }
+    })
   };
+
+  const handleNavigateExit = () => {
+    navigate('/inventory');
+  }
 
   return (
     <div className="add_product_page_container">
@@ -193,9 +207,21 @@ const AddProductPage = () => {
               {...register('sku', { required: 'Este campo es obligatorio' })}
             />
           </Box>
+
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flex: 0.2 }}>
             <label className="add_product_page_label_check" htmlFor="new_product">
-              NP:
+              Ocultar:
+            </label>
+            <Checkbox
+              {...register('deleted_at')}
+              color="primary"
+              defaultChecked={false}
+            />
+          </Box>
+
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flex: 0.2 }}>
+            <label className="add_product_page_label_check" htmlFor="new_product">
+              Nuevo:
             </label>
             <Checkbox
               {...register('new_product')}
@@ -225,7 +251,7 @@ const AddProductPage = () => {
               type="text"
               id="description"
               label="Descripcion"
-              variant="outlined"              
+              variant="outlined"
               error={!!errors.description}
               helperText={errors.description ? errors.description.message : ''}
               className={`add_product_page_input ${errors.description ? 'input-error' : ''}`}
@@ -235,24 +261,31 @@ const AddProductPage = () => {
         </Box>
 
         <Box style={{ display: "flex", marginTop: 20, gap: 10 }}>
-          <FormControl>
+          <FormControl style={{ flex: 1 }}>
             <TextField
               id="stock"
               type="number"
               label="Stock"
+              inputProps={{ step: "1" }}
               error={!!errors.stock}
               helperText={errors.stock ? errors.stock.message : ''}
-              {...register('stock', { required: 'Este campo es obligatorio' })}
+              {...register('stock', { 
+                required: 'Este campo es obligatorio',
+                pattern: {
+                  value: /^\d+$/, // Expresión regular para validar números enteros positivos
+                  message: 'Ingrese un número entero válido'
+                }
+              })}
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl style={{ flex: 1 }}>
             <TextField
               id="weight"
               type="number"
               label="Peso"
               defaultValue='0.070'
-              step="0.01"
+              inputProps={{ step: "0.001" }}
               error={!!errors.weight}
               helperText={errors.weight ? errors.weight.message : ''}
               {...register('weight', { required: 'Este campo es obligatorio' })}
@@ -261,26 +294,25 @@ const AddProductPage = () => {
         </Box>
 
         <Box style={{ display: "flex", marginTop: 20, gap: 10 }}>
-          <FormControl>
+          <FormControl style={{ flex: 1 }}>
             <TextField
               id="cost_price"
               type="number"
               label="Precio producción"
-              defaultValue='2.22'
-              step="0.01"
+              inputProps={{ step: "0.01" }}
               error={!!errors.cost_price}
               helperText={errors.cost_price ? errors.cost_price.message : ''}
               {...register('cost_price', { required: 'Este campo es obligatorio' })}
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl style={{ flex: 1 }}>
             <TextField
               id="sell_price"
               type="number"
               defaultValue='5.00'
               label="Precio de venta"
-              step="0.01"
+              inputProps={{ step: "0.01" }}
               error={!!errors.sell_price}
               helperText={errors.sell_price ? errors.sell_price.message : ''}
               {...register('sell_price', { required: 'Este campo es obligatorio' })}
@@ -381,7 +413,7 @@ const AddProductPage = () => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={handleNavigate}
+            onClick={handleNavigateExit}
           >
             SALIR
           </Button>
