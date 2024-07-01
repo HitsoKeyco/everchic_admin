@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { Alert, Box, Button, Checkbox, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Swal from "sweetalert2";
+import CircularProgress from '@mui/material/CircularProgress';
+import Backdrop from '@mui/material/Backdrop';
 
 const AddProductPage = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -17,6 +19,7 @@ const AddProductPage = () => {
   const [selectedImages, setSelectedImage] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [loading, setLoading] = useState(false); // Estado de carga
 
   /* Estados Globales Redux*/
   const sizes = useSelector(state => state.products.sizesStore);
@@ -82,32 +85,23 @@ const AddProductPage = () => {
   };
 
 
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const success = await dispatch(addProductThunk(data, tags, imageFiles));
       if (success) {
-        setShowSuccessAlert(true);
         handleNavigate();
-      } else {
-        setShowErrorAlert(true);
       }
     } catch (error) {
       console.error('Error al agregar el producto:', error);
-      setShowErrorAlert(true);
+
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleCloseSuccessAlert = () => {
-    setShowSuccessAlert(false);
 
-  };
-
-  const handleCloseErrorAlert = () => {
-    setShowErrorAlert(false);
-  };
 
   const handleNavigate = () => {
     Swal.fire({
@@ -269,7 +263,7 @@ const AddProductPage = () => {
               inputProps={{ step: "1" }}
               error={!!errors.stock}
               helperText={errors.stock ? errors.stock.message : ''}
-              {...register('stock', { 
+              {...register('stock', {
                 required: 'Este campo es obligatorio',
                 pattern: {
                   value: /^\d+$/, // Expresión regular para validar números enteros positivos
@@ -419,20 +413,15 @@ const AddProductPage = () => {
           </Button>
         </Box>
       </form>
-      {/* Snackbar para mostrar alerta de éxito */}
-      <Snackbar open={showSuccessAlert} autoHideDuration={6000} onClose={handleCloseSuccessAlert}>
-        <Alert onClose={handleCloseSuccessAlert} severity="success" sx={{ width: '100%' }}>
-          Producto agregado correctamente.
-        </Alert>
-      </Snackbar>
 
-      {/* Snackbar para mostrar alerta de error */}
-      <Snackbar open={showErrorAlert} autoHideDuration={6000} onClose={handleCloseErrorAlert}>
-        <Alert onClose={handleCloseErrorAlert} severity="error" sx={{ width: '100%' }}>
-          Error al agregar el producto. Inténtalo de nuevo más tarde.
-        </Alert>
-      </Snackbar>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
+
   );
 };
 
