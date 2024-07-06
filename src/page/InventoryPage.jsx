@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './css/Inventory.css';
 import CardProduct from '../components/Modals/Product/CardProduct';
 import { useDispatch } from 'react-redux';
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import getConfigAuth from '../utils/getConfigAuth';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
+import { Button, TextField } from '@mui/material';
 
 const InventoryPage = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -23,6 +24,7 @@ const InventoryPage = () => {
         totalPages: 0
     });
     const [loading, setLoading] = useState(false); // Estado de carga
+    const searchTimeoutRef = useRef(null);
 
     const limit = 7; // cantidad de productos
 
@@ -45,8 +47,24 @@ const InventoryPage = () => {
     };
 
     useEffect(() => {
-        fetchProducts();
+        if (!isSearchProduct) {
+            fetchProducts();
+        }
     }, [pagination.currentPage]);
+
+    useEffect(() => {
+        if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current);
+        }
+
+        if (isSearchProduct.trim() === '') {
+            fetchProducts();
+        } else {
+            searchTimeoutRef.current = setTimeout(() => {
+                handleSearchProduct();
+            }, 2000);
+        }
+    }, [isSearchProduct]);
 
     const handleChangePage = (event, page) => {
         if (page > 0 && page <= pagination.totalPages) {
@@ -61,6 +79,24 @@ const InventoryPage = () => {
         navigate('/add_product');
     };
 
+    const handleSearchProduct = () => {
+        setLoading(true); // Comienza la carga
+        axios.get(`${apiUrl}/products/searchByNameOrSKU`, { params: { title: isSearchProduct, sku: isSearchProduct, page: 1, limit: 10 } })
+            .then(res => {
+                const { total, currentPage, totalPages, products } = res.data;
+                setPagination({ total, currentPage, totalPages });
+                setProductsAPI(products);
+                localStorage.setItem('everchic_stored_products', JSON.stringify(res.data));
+                dispatch(allProducts(products));
+            })
+            .catch(err => {
+                console.log(err);
+            })
+            .finally(() => {
+                setLoading(false); // Termina la carga
+            });
+    }
+
     return (
         <>
             <div className="inventory_page_container">
@@ -68,13 +104,7 @@ const InventoryPage = () => {
                     <p className='inventory_page_title'>Inventario</p>
                     <div className="inventory_page_controller_user">
                         <div className="inventory_page_controllers_search_container">
-                            <input
-                                type="text"
-                                className='inventory_page_search_input'
-                                placeholder='Ingrese nombre del producto.'
-                                onChange={(e) => setIsSearchProduct(e.target.value)}
-                            />
-                            <i className='bx bx-search-alt inventory_page_search_button'></i>
+                            <TextField id="outlined-basic" label="Buscar"  fullWidth variant="outlined" onChange={(e) => setIsSearchProduct(e.target.value)} />                            
                         </div>
                         <div className="inventory_page_controllers_add_contact_container">
                             <i className='bx bx-add-to-queue inventory_page_add' onClick={handleAddProduct}></i>
