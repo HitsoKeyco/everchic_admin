@@ -26,7 +26,7 @@ const InventoryPage = () => {
     const [loading, setLoading] = useState(false); // Estado de carga
     const searchTimeoutRef = useRef(null);
 
-    const limit = 7; // cantidad de productos
+    const limit = 10; // cantidad de productos
 
     const fetchProducts = () => {
         setLoading(true); // Comienza la carga
@@ -64,7 +64,7 @@ const InventoryPage = () => {
                 handleSearchProduct();
             }, 2000);
         }
-    }, [isSearchProduct]);
+    }, [isSearchProduct, pagination.currentPage]);
 
     const handleChangePage = (event, page) => {
         if (page > 0 && page <= pagination.totalPages) {
@@ -81,7 +81,7 @@ const InventoryPage = () => {
 
     const handleSearchProduct = () => {
         setLoading(true); // Comienza la carga
-        axios.get(`${apiUrl}/products/searchByNameOrSKU`, { params: { title: isSearchProduct, sku: isSearchProduct, page: 1, limit: 10 } })
+        axios.get(`${apiUrl}/products/searchByNameOrSKU`, { params: { title: isSearchProduct, page: pagination.currentPage, limit } })
             .then(res => {
                 const { total, currentPage, totalPages, products } = res.data;
                 setPagination({ total, currentPage, totalPages });
