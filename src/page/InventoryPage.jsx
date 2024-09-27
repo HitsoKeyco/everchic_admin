@@ -26,7 +26,7 @@ const InventoryPage = () => {
     const [loading, setLoading] = useState(false); // Estado de carga
     const searchTimeoutRef = useRef(null);
 
-    const limit = 10; // cantidad de productos
+    const limit = 15; // cantidad de productos
 
     const fetchProducts = () => {
         setLoading(true); // Comienza la carga

@@ -67,7 +67,7 @@ const AddProduct = ({ setIsModalCreate, setUpdate }) => {
         sell_price: data.sell_price,
         sku: data.sku,
         sizeId: data.size,
-        stock: data.stock,
+        stock: Number(data.stock),
         categoryId: Number(data.category),
         supplierId: Number(data.supplier),
         collectionId: Number(data.collection),
@@ -177,7 +177,7 @@ const AddProduct = ({ setIsModalCreate, setUpdate }) => {
         <div className="flex absolute inset-0 z-[-1] backdrop-blur-sm" onClick={handleModal}></div>
         <form action="" className="bg-waikana-gray-300 text-waikana-gray-950 p-4 shadow-xl  rounded-lg flex flex-col gap-2 max-w-[850px]" onSubmit={handleSubmit(submitProduct)}>
           <div className='bg-waikana-gray-800 text-waikana-gray-50 rounded-lg mb-4'>
-            <p className='text-lg font-semibold p-4'>Agregar producto</p> 
+            <p className='text-lg font-semibold p-4'>Agregar productos</p> 
           </div>
           <div className='flex gap-4'>
             <div>

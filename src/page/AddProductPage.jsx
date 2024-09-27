@@ -91,7 +91,7 @@ const AddProductPage = () => {
     try {
       const success = await dispatch(addProductThunk(data, tags, imageFiles));
       if (success) {
-        handleNavigate();
+       // handleNavigate();
       }
     } catch (error) {
       console.error('Error al agregar el producto:', error);
@@ -282,7 +282,19 @@ const AddProductPage = () => {
               inputProps={{ step: "0.001" }}
               error={!!errors.weight}
               helperText={errors.weight ? errors.weight.message : ''}
-              {...register('weight', { required: 'Este campo es obligatorio' })}
+              {...register('weight', { required: 'Este campo es obligatorio',
+                pattern: {
+                  value: /^\d+(\.\d{1,3})?$/, // Expresión regular para validar números decimales positivos
+                  message: 'Ingrese un número decimal válido'
+                },
+                //Peso mayor a 0
+                validate: value => {
+                  if (parseFloat(value) <= 0) {
+                    return 'El peso debe ser mayor a 0';
+                  }
+                  return true;
+                }
+               })}
             />
           </FormControl>
         </Box>
@@ -296,7 +308,24 @@ const AddProductPage = () => {
               inputProps={{ step: "0.01" }}
               error={!!errors.cost_price}
               helperText={errors.cost_price ? errors.cost_price.message : ''}
-              {...register('cost_price', { required: 'Este campo es obligatorio' })}
+              {...register('cost_price', { 
+                required: 'Este campo es obligatorio',                
+                pattern: {
+                  value: /^\d+(\.\d{1,2})?$/, // Expresión regular para validar números decimales positivos
+                  message: 'Ingrese un número decimal válido'
+                },
+                validate: value => {
+                  if (parseFloat(value) >= parseFloat(watch('sell_price'))) {
+                    return 'El precio de producción debe ser menor al precio de venta';
+                  }
+                  
+                  if (parseFloat(value) <= 0) {
+                    return 'El precio de producción debe ser mayor a 0';
+                  }
+                  return true;
+               }
+              })}  
+              
             />
           </FormControl>
 
@@ -309,7 +338,18 @@ const AddProductPage = () => {
               inputProps={{ step: "0.01" }}
               error={!!errors.sell_price}
               helperText={errors.sell_price ? errors.sell_price.message : ''}
-              {...register('sell_price', { required: 'Este campo es obligatorio' })}
+              {...register('sell_price', { required: 'Este campo es obligatorio',
+                pattern: {
+                  value: /^\d+(\.\d{1,2})?$/, // Expresión regular para validar números decimales positivos
+                  message: 'Ingrese un número decimal válido'
+                },
+                validate: value => {
+                  if (parseFloat(value) <= 0) {
+                    return 'El precio de venta debe ser mayor a 0';
+                  }
+                  return true;
+                }
+               })}
             />
           </FormControl>
         </Box>

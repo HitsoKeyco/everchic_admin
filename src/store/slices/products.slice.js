@@ -115,22 +115,13 @@ export const allSupplierProductsThunk = () => (dispatch) => {
 
 }
 
-
-
 //------------------------- Thunks  Add product --------------------------------//
 
 export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
-    const dataProduct = {
-        ...data,
-        sizeId: parseInt(data.sizeId, 10),
-        collectionId: parseInt(data.collectionId, 10),
-        supplierId: parseInt(data.supplierId, 10),
-        categoryId: parseInt(data.categoryId, 10)
-    };
-
+    
     try {
         // Agregar el producto
-        const productResponse = await axios.post(`${apiUrl}/products`, dataProduct, getConfigAuth());
+        const productResponse = await axios.post(`${apiUrl}/products`, data, getConfigAuth());
         const productId = productResponse.data.id;
 
         // Subir imágenes y obtener los IDs y URLs
