@@ -16,6 +16,9 @@ const CardProduct = ({ product, fetchProducts }) => {
         setIsModalProduct(true);
     };
 
+    console.log(product);
+    
+
     const handleDeleteproduct = (e) => {
         e.stopPropagation();
         Swal.fire({
@@ -66,6 +69,7 @@ const CardProduct = ({ product, fetchProducts }) => {
                     }
                     <li className='card_product_li'>Coleccion: {product.collection?.name}</li>
                     <li className='card_product_li'>Talla: {product.size?.size}</li>
+                    <li className='card_product_li'>SKU: {product?.sku}</li>
                 </ul>
             </div>
             <div className="card_product_actions">

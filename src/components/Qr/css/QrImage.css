@@ -4,10 +4,17 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    background-color: rgb(236, 248, 213);
+    margin: 5px;    
+    border-radius: 5px;
 }
 
 .qr_image_title{
     color: var(--colorText_a);
+    padding: 0;
 }
 .qr_image_generate_container{
     display: flex;

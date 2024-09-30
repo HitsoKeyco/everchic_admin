@@ -1,3 +1,10 @@
 .config_page_container{
     padding-top: 0px;
+    margin-top: 70px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
 }
+
+

@@ -579,7 +579,10 @@ const EditProductPage = () => {
                               onChange={field.onChange}
                               error={!!errors.collectionId}
                             >
-                              {collections?.map((collection) => (
+                              {collections
+                                ?.slice()
+                                 .sort((a, b) => a.name.localeCompare(b.name))
+                                 .map((collection) => (
                                 <MenuItem key={collection.id} value={collection.id}>
                                   {collection.name}
                                 </MenuItem>
