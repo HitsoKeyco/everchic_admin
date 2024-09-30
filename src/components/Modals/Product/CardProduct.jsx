@@ -16,9 +16,6 @@ const CardProduct = ({ product, fetchProducts }) => {
         setIsModalProduct(true);
     };
 
-    console.log(product);
-    
-
     const handleDeleteproduct = (e) => {
         e.stopPropagation();
         Swal.fire({
