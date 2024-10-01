@@ -5,9 +5,16 @@ import Skeleton from '@mui/material/Skeleton';
 import { Alert, AlertTitle, Button } from '@mui/material';
 import io from 'socket.io-client';  // Importar socket.io-client
 
+
+
 const QrImage = () => {    
-    const PORT_BOT_WHATSAPP = import.meta.env.PORT_BOT_WHATSAPP;
-    const PORT_SOCKET_IO = import.meta.env.PORT_SOCKET_IO;
+    const PORT_BOT_WHATSAPP = import.meta.env.VITE_API_PORT_BOT_WHATSAPP;
+    const PORT_SOCKET_IO = import.meta.env.VITE_API_PORT_SOCKET_IO;
+
+
+    console.log(PORT_BOT_WHATSAPP,  PORT_SOCKET_IO);
+
+    
     const [image, setImage] = useState(null);
     const [statusConnection, setStatusConnection] = useState(false);
     const [testMessageSuccess, setTestMessageSuccess] = useState(false);
