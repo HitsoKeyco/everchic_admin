@@ -86,7 +86,7 @@ const QrImage = () => {
     const testMessageSend = async () => {
         setIsSending(true); // Iniciar envío
         try {
-            const response = await axios.post(`${PORT_BOT_WHATSAPP}/v1/test-send-message`);
+            const response = await axios.post(`${PORT_BOT_WHATSAPP}/whatsapp/v1/test-send-message`);
             if (response && response.data === 'sended') {
                 setTestMessageSuccess(true);
                 setTestMessageFail(false);
@@ -107,7 +107,7 @@ const QrImage = () => {
         setIsSending(false); // Finalizar envío
     }
 
-    
+
 
     const statusConnectionFetch = async () => {
         try {
