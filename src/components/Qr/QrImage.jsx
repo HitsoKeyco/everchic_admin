@@ -107,21 +107,24 @@ const QrImage = () => {
         setIsSending(false); // Finalizar envío
     }
 
+    
+
     const statusConnectionFetch = async () => {
         try {
             const response = await axios.post(`${PORT_BOT_WHATSAPP}/v1/status`);            
             if (response && response.data === 'connected') {
                 setStatusConnection(true);
             }
-
+    
             if (response && response.data === 'disconnected') {
                 setStatusConnection(false);
             }
-
+    
         } catch (error) {
             console.error('Error en el estado de conexión:', error.message);
         }
     }
+
 
     return (
         <div className='qr_image_container'>
