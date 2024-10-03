@@ -156,10 +156,10 @@ const EditProductPage = () => {
 
 
 
-  const submit = async (data) => {
-    console.log(data);
+  const submit = async (e, data) => {
+    e.preventDefault();
     try {
-      const success = await dispatch(updateProductThunk(id, data, imgtoToLoad, imageIdsToDelete, tags, tagsIdDelete))
+      const success = dispatch(updateProductThunk(id, data, imgtoToLoad, imageIdsToDelete, tags, tagsIdDelete))
       setImageIdsToDelete([]);
       setTagsIdDelete([])
       if (success) {
@@ -187,8 +187,7 @@ const EditProductPage = () => {
     setShowErrorAlert(false);
   };
 
-  const handleNavigate = () => {
-    
+  const handleNavigate = () => {    
     Swal.fire({
       title: 'Producto actualizado',
       text: 'El producto se ha actualizado correctamente',

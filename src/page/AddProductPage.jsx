@@ -86,12 +86,12 @@ const AddProductPage = () => {
 
 
 
-  const onSubmit = async (data) => {
+  const submit = async (data) => {
     setLoading(true);
     try {
-      const success = await dispatch(addProductThunk(data, tags, imageFiles));
+      const success = dispatch(addProductThunk(data, tags, imageFiles));
       if (success) {
-       // handleNavigate();
+        handleNavigate();
       }
     } catch (error) {
       console.error('Error al agregar el producto:', error);
@@ -122,7 +122,7 @@ const AddProductPage = () => {
 
   return (
     <div className="add_product_page_container">
-      <form className="add_product_page_form" onSubmit={handleSubmit(onSubmit)}>
+      <form className="add_product_page_form" onSubmit={handleSubmit(submit)}>
         <div className='add_product_page_title_container'>
           <p className='add_product_page_title'>Agregar Producto</p>
         </div>
@@ -136,7 +136,7 @@ const AddProductPage = () => {
             />
           )}
         </div>
-
+        {/*------------------------------\\ Image //-----------------------------------*/}
         <div className='add_product_page_images_load_container'>
           {imageFiles.map((image, index) => (
             <div key={index} className="add_product_page_images_img_container">
@@ -152,7 +152,7 @@ const AddProductPage = () => {
             </div>
           ))}
         </div>
-
+        {/*------------------------------\\ Image Load //-----------------------------------*/}
         <Box sx={{ paddingTop: 1 }}>
           <Button
             component="label"
@@ -186,7 +186,7 @@ const AddProductPage = () => {
             onChange={handleTagsChange}
           />
         </Box>
-
+        {/*------------------------------\\ SKU //-----------------------------------*/}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Box style={{ flex: 0.8 }}>
             <TextField
@@ -201,7 +201,7 @@ const AddProductPage = () => {
               {...register('sku', { required: 'Este campo es obligatorio' })}
             />
           </Box>
-
+          {/*------------------------------\\ Ocultar producto//-----------------------------------*/}
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flex: 0.2 }}>
             <label className="add_product_page_label_check" htmlFor="new_product">
               Ocultar:
@@ -212,7 +212,7 @@ const AddProductPage = () => {
               defaultChecked={false}
             />
           </Box>
-
+          {/*------------------------------\\ Nuevo producto //-----------------------------------*/}
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flex: 0.2 }}>
             <label className="add_product_page_label_check" htmlFor="new_product">
               Nuevo:
@@ -224,7 +224,7 @@ const AddProductPage = () => {
             />
           </Box>
         </Box>
-
+        {/*------------------------------\\ Name//-----------------------------------*/}
         <Box style={{ marginTop: 20 }}>
           <TextField
             type="text"
@@ -238,7 +238,7 @@ const AddProductPage = () => {
             {...register('title', { required: 'Este campo es obligatorio' })}
           />
         </Box>
-
+        {/*------------------------------\\ Descripcion del Producto //-----------------------------------*/}
         <Box style={{ marginTop: 20 }}>
           <FormControl style={{ display: "flex" }}>
             <TextField
@@ -253,7 +253,7 @@ const AddProductPage = () => {
             />
           </FormControl>
         </Box>
-
+        {/*------------------------------\\ Stock //-----------------------------------*/}
         <Box style={{ display: "flex", marginTop: 20, gap: 10 }}>
           <FormControl style={{ flex: 1 }}>
             <TextField
@@ -272,7 +272,7 @@ const AddProductPage = () => {
               })}
             />
           </FormControl>
-
+          {/*------------------------------\\ Weight //-----------------------------------*/}
           <FormControl style={{ flex: 1 }}>
             <TextField
               id="weight"
@@ -282,7 +282,8 @@ const AddProductPage = () => {
               inputProps={{ step: "0.001" }}
               error={!!errors.weight}
               helperText={errors.weight ? errors.weight.message : ''}
-              {...register('weight', { required: 'Este campo es obligatorio',
+              {...register('weight', {
+                required: 'Este campo es obligatorio',
                 pattern: {
                   value: /^\d+(\.\d{1,3})?$/, // Expresión regular para validar números decimales positivos
                   message: 'Ingrese un número decimal válido'
@@ -294,12 +295,12 @@ const AddProductPage = () => {
                   }
                   return true;
                 }
-               })}
+              })}
             />
           </FormControl>
         </Box>
-
         <Box style={{ display: "flex", marginTop: 20, gap: 10 }}>
+          {/*------------------------------\\ Price Production //-----------------------------------*/}
           <FormControl style={{ flex: 1 }}>
             <TextField
               id="cost_price"
@@ -308,8 +309,8 @@ const AddProductPage = () => {
               inputProps={{ step: "0.01" }}
               error={!!errors.cost_price}
               helperText={errors.cost_price ? errors.cost_price.message : ''}
-              {...register('cost_price', { 
-                required: 'Este campo es obligatorio',                
+              {...register('cost_price', {
+                required: 'Este campo es obligatorio',
                 pattern: {
                   value: /^\d+(\.\d{1,2})?$/, // Expresión regular para validar números decimales positivos
                   message: 'Ingrese un número decimal válido'
@@ -318,17 +319,17 @@ const AddProductPage = () => {
                   if (parseFloat(value) >= parseFloat(watch('sell_price'))) {
                     return 'El precio de producción debe ser menor al precio de venta';
                   }
-                  
+
                   if (parseFloat(value) <= 0) {
                     return 'El precio de producción debe ser mayor a 0';
                   }
                   return true;
-               }
-              })}  
-              
+                }
+              })}
+
             />
           </FormControl>
-
+          {/*------------------------------\\ Precio de Venta //-----------------------------------*/}
           <FormControl style={{ flex: 1 }}>
             <TextField
               id="sell_price"
@@ -338,7 +339,8 @@ const AddProductPage = () => {
               inputProps={{ step: "0.01" }}
               error={!!errors.sell_price}
               helperText={errors.sell_price ? errors.sell_price.message : ''}
-              {...register('sell_price', { required: 'Este campo es obligatorio',
+              {...register('sell_price', {
+                required: 'Este campo es obligatorio',
                 pattern: {
                   value: /^\d+(\.\d{1,2})?$/, // Expresión regular para validar números decimales positivos
                   message: 'Ingrese un número decimal válido'
@@ -349,12 +351,12 @@ const AddProductPage = () => {
                   }
                   return true;
                 }
-               })}
+              })}
             />
           </FormControl>
         </Box>
-
         <Box style={{ width: "100%", display: "flex", paddingTop: 20, gap: 10 }}>
+          {/*------------------------------\\ Talla //-----------------------------------*/}
           <FormControl style={{ flex: 1 }}>
             <InputLabel id="shipping-select-label">Talla</InputLabel>
             <Select
@@ -373,7 +375,7 @@ const AddProductPage = () => {
               <FormHelperText error>{errors.sizeId.message}</FormHelperText>
             )}
           </FormControl>
-
+          {/*------------------------------\\ Collection //-----------------------------------*/}
           <FormControl style={{ flex: 1 }}>
             <InputLabel id="shipping-select-label">Colección</InputLabel>
             <Select
@@ -382,11 +384,14 @@ const AddProductPage = () => {
               defaultValue=""
               {...register('collectionId', { required: 'Este campo es obligatorio' })}
             >
-              {collections?.map((collection) => (
-                <MenuItem key={collection.id} value={collection.id}>
-                  {collection.name}
-                </MenuItem>
-              ))}
+              {collections
+                ?.slice()
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((collection) => (
+                  <MenuItem key={collection.id} value={collection.id}>
+                    {collection.name}
+                  </MenuItem>
+                ))}
             </Select>
             {errors.collectionId && (
               <FormHelperText error>{errors.collectionId.message}</FormHelperText>
