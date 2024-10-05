@@ -156,8 +156,8 @@ const EditProductPage = () => {
 
 
 
-  const submit = async (e, data) => {
-    e.preventDefault();
+  const submit = async (data) => {
+    
     try {
       const success = dispatch(updateProductThunk(id, data, imgtoToLoad, imageIdsToDelete, tags, tagsIdDelete))
       setImageIdsToDelete([]);
