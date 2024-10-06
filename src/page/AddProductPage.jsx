@@ -89,32 +89,37 @@ const AddProductPage = () => {
   const submit = async (data) => {
     setLoading(true);
     try {
-      const success = dispatch(addProductThunk(data, tags, imageFiles));
-      if (success) {
-        handleNavigate();
-      }
+        // Espera a que la promesa se resuelva
+        const result = await dispatch(addProductThunk(data, tags, imageFiles));       
+        handleNavigate(result);        
     } catch (error) {
-      console.error('Error al agregar el producto:', error);
-
+        console.error('Error al agregar el producto:', error);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
 
 
-  const handleNavigate = () => {
-    Swal.fire({
-      title: 'Producto ingresado',
-      text: 'El producto se ha agregado correctamente',
-      icon: 'success',
-      confirmButtonText: 'Aceptar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate('/inventory');
-      }
-    })
-  };
+const handleNavigate = (isSuccess) => {
+  const title = isSuccess ? 'El producto agregado' : 'Error en el producto';
+  const text = isSuccess ? 'El producto se ha agregado correctamente' : 'Error o ya existe el producto, SKU';
+  const icon = isSuccess ? 'success' : 'error';
+
+  Swal.fire({
+    title,
+    text,
+    icon,
+    confirmButtonText: 'Salir',
+    showCancelButton: true, // Cambiado a true para mostrar el botón de cancelar
+    cancelButtonText: 'Modificar' // Añadido para el texto del botón de cancelar
+  }).then((result) => {
+    if (result.isConfirmed) {
+      navigate('/inventory');
+    }
+  });
+};
+
 
   const handleNavigateExit = () => {
     navigate('/inventory');
@@ -130,7 +135,7 @@ const AddProductPage = () => {
         <div className="add_product_page_image_container">
           {selectedImages && (
             <img
-              src={URL.createObjectURL(selectedImages)}
+              src={ URL.createObjectURL(selectedImages)}
               alt="Imagen seleccionada"
               className="add_product_page_image"
             />
@@ -192,7 +197,7 @@ const AddProductPage = () => {
             <TextField
               type="text"
               id="outlined-basic"
-              label="sku"
+              label="SKU"
               style={{ width: "95%" }}
               variant="outlined"
               error={!!errors.sku}
@@ -446,6 +451,7 @@ const AddProductPage = () => {
             variant="contained"
             color="primary"
             type="submit"
+            sx={{ width: '100%', maxWidth: '220px' }}
           >
             AGREGAR
           </Button>
@@ -453,6 +459,7 @@ const AddProductPage = () => {
             variant="contained"
             color="secondary"
             onClick={handleNavigateExit}
+            sx={{ width: '100%', maxWidth: '220px' }}
           >
             SALIR
           </Button>

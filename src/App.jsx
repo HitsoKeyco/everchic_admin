@@ -4,6 +4,7 @@ import Header from "./shared/Header";
 import { useSelector } from "react-redux";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import LoginPage from "./page/LoginPage";
+import Footer from "./components/Footer";
 
 
 function App() {
@@ -22,6 +23,13 @@ function App() {
         }
         <Route path='*' element={<Navigate to='/login' replace />} />
       </Routes>
+      {
+        <div className="footer_containers">
+          {
+            isLogin && <Footer />
+          }
+        </div>
+      }
     </div>
   );
 }

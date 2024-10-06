@@ -1,0 +1,34 @@
+.footer_container {
+    width: 100%;
+    height: 100px;
+    background-color: #160455; /* Un color oscuro para el fondo */
+    color: #fff; /* Texto en color blanco */
+    text-align: center; /* Centrar el texto */
+    padding: 20px 0; /* Espaciado arriba y abajo */   
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    margin-top: 15px;
+
+  }
+  
+  .footer_container p {
+    font-size: 12px;
+    margin: 0; /* Quitar márgenes para que no haya espacio innecesario */
+  }
+  
+  .footer_container p span {
+    font-weight: bold; /* Para resaltar el nombre */
+    color: #ff6b6b; /* Color rojo suave para "con amor" */
+  }
+  
+  .footer_container p a {
+    
+    color: #ff6b6b; /* Color del enlace */
+    text-decoration: none; /* Quitar subrayado del enlace */
+  }
+  
+  .footer_container p a:hover {
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+  }
+  

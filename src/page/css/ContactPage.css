@@ -2,7 +2,9 @@
 
 .contact_page_container{
     padding: 0 10px;
-    padding-top: 60px
+    padding-top: 60px;
+    min-height: calc(100vh - 115px);
+    
     
 }
 .contact_page_controller_user{

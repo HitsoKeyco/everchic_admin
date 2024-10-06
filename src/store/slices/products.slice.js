@@ -118,7 +118,6 @@ export const allSupplierProductsThunk = () => (dispatch) => {
 //------------------------- Thunks  Add product --------------------------------//
 
 export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
-    
     try {
         // Agregar el producto
         const productResponse = await axios.post(`${apiUrl}/products`, data, getConfigAuth());
@@ -126,34 +125,34 @@ export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
 
         // Subir imágenes y obtener los IDs y URLs
         const imageUploadPromises = imageFiles.map(async (imageFile) => {
-            const smallImage = await resizeAndConvertImage(imageFile, 500, 500);
-            const mediumImage = await resizeAndConvertImage(imageFile, 1500, 1500);
+            try {
+                const smallImage = await resizeAndConvertImage(imageFile, 500, 500);
+                const mediumImage = await resizeAndConvertImage(imageFile, 1500, 1500);
 
-            // Subir la imagen pequeña y la imagen mediana
-            const formDataImage = new FormData();
-            formDataImage.append('smallImage', smallImage, `${imageFile.name.split('.')[0]}-small.webp`);
-            formDataImage.append('mediumImage', mediumImage, `${imageFile.name.split('.')[0]}-medium.webp`);
-            formDataImage.append('productId', productId);
+                // Subir la imagen pequeña y la imagen mediana
+                const formDataImage = new FormData();
+                formDataImage.append('smallImage', smallImage, `${imageFile.name.split('.')[0]}-small.webp`);
+                formDataImage.append('mediumImage', mediumImage, `${imageFile.name.split('.')[0]}-medium.webp`);
+                formDataImage.append('productId', productId);
 
-            // Subir el FormData con ambas imágenes
-            const imageResponse = await axios.post(`${apiUrl}/product_images`, formDataImage, {
-                ...getConfigAuth(),
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-
-            return imageResponse.data;
+                // Subir el FormData con ambas imágenes
+                await axios.post(`${apiUrl}/product_images`, formDataImage, {
+                    ...getConfigAuth(),
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+            } catch (uploadError) {
+                console.error('Error al subir la imagen:', uploadError);
+                throw uploadError; // Lanza el error para que sea capturado en el bloque catch principal
+            }
         });
 
-        const imageInfos = await Promise.all(imageUploadPromises);
-
-        // // Asociar imágenes con el producto
-        // await axios.post(`${apiUrl}/products/${productId}/images`, imageInfos.map(info => info.id), getConfigAuth());
+        await Promise.all(imageUploadPromises);
 
         // Asociar talla con el producto
-        const productSize = { productId, sizeId: dataProduct.sizeId };
-        await axios.post(`${apiUrl}/products/${productId}/addSize/${dataProduct.sizeId}`, productSize, getConfigAuth());
+        const productSize = { productId, sizeId: data.sizeId };
+        await axios.post(`${apiUrl}/products/${productId}/addSize/${data.sizeId}`, productSize, getConfigAuth());
 
         // Relacionar etiquetas con el producto
         if (tags) {
@@ -165,8 +164,9 @@ export const addProductThunk = (data, tags, imageFiles) => async (dispatch) => {
         dispatch(getAllProductThunk());
         return true;
     } catch (error) {
-        console.error('Error al agregar el producto:', error);
-        // Maneja los errores aquí
+        console.error('Error al agregar el producto:', error.message || error); // Mensaje más claro
+        // Opcional: Puedes lanzar el error o hacer algo más específico con él
+        return false;
     }
 };
 
@@ -179,8 +179,10 @@ export const updateProductThunk = (productId, data, imgtoToLoad, imageIdsToDelet
 
         // Subir imágenes y obtener los IDs
         const imageUploadPromises = imgtoToLoad.map(async (imageFile) => {
-            const smallImage = await resizeAndConvertImage(imageFile, 500, 500);
-            const mediumImage = await resizeAndConvertImage(imageFile, 1500, 1500);
+            const [smallImage, mediumImage] = await Promise.all([
+                resizeAndConvertImage(imageFile, 500, 500),
+                resizeAndConvertImage(imageFile, 1500, 1500),
+            ]);
 
             // Crear FormData con ambas imágenes
             const formDataImage = new FormData();
@@ -189,50 +191,44 @@ export const updateProductThunk = (productId, data, imgtoToLoad, imageIdsToDelet
             formDataImage.append('productId', productId);
 
             // Subir el FormData con ambas imágenes
-            const imageResponse = await axios.post(`${apiUrl}/product_images`, formDataImage, {
+            return await axios.post(`${apiUrl}/product_images`, formDataImage, {
                 ...getConfigAuth(),
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                headers: { 'Content-Type': 'multipart/form-data' }
             });
-
-            return imageResponse.data;
         });
 
         await Promise.all(imageUploadPromises);
 
         // Eliminar imágenes
-        if (imageIdsToDelete.length > 0) {
-            const idsImgDelete = { ids: imageIdsToDelete };
+        if (imageIdsToDelete.length) {
             await axios.delete(`${apiUrl}/product_images/remove`, {
-                data: idsImgDelete,  // Pasar los datos en la opción 'data'
-                ...getConfigAuth()  // También incluye las opciones de configuración de autenticación si es necesario
+                data: { ids: imageIdsToDelete },
+                ...getConfigAuth()
             });
         }
 
         // Relacionar etiquetas con el producto
         if (tags) {
-            const urlTags = `${apiUrl}/tags/${productId}/relateTags`;
-            await axios.post(urlTags, tags, getConfigAuth());
+            await axios.post(`${apiUrl}/tags/${productId}/relateTags`, tags, getConfigAuth());
         }
 
         // Eliminar etiquetas
-        if (tagsIdDelete.length > 0) {
-            const idsTagsDelete = { ids: tagsIdDelete };
+        if (tagsIdDelete.length) {
             await axios.delete(`${apiUrl}/tags/remove/${productId}`, {
-                data: idsTagsDelete,  // Pasar los datos en la opción 'data'
-                ...getConfigAuth()  // También incluye las opciones de configuración de autenticación si es necesario
+                data: { ids: tagsIdDelete },
+                ...getConfigAuth()
             });
         }
 
         // Despachar acción para obtener todos los productos
         dispatch(getAllProductThunk());
-        return true;
+        return true;  // Indica que la actualización fue exitosa
     } catch (error) {
         console.error('Hubo un problema al actualizar el producto:', error);
-        // Manejar los errores aquí
+        return false;  // Indica que hubo un error durante la actualización
     }
 };
+
 
 
 // ------------------------- Delete Product --------------------------------//

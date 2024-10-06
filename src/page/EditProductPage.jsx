@@ -10,7 +10,7 @@ import { allCategoriesProductsThunk, allCollectionProductsThunk, allSizesProduct
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import getConfigAuth from "../utils/getConfigAuth";
-import { Alert, Box, Button, Checkbox, FormControl, FormControlLabel, Input, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
+import { Alert, Box, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, Input, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Swal from "sweetalert2";
 
@@ -39,12 +39,10 @@ const EditProductPage = () => {
   useEffect(() => {
     if (id) {
       axios.get(`${apiUrl}/products/search/${id}`, getConfigAuth())
-        .then(res => {
+        .then(res => {         
           setProduct(res.data)
           setImageFiles(res.data.productImgs)
           setTags(res.data.tags)
-
-
         })
         .catch(err => console.log(err))
 
@@ -157,48 +155,41 @@ const EditProductPage = () => {
 
 
   const submit = async (data) => {
-    
+
     try {
-      const success = dispatch(updateProductThunk(id, data, imgtoToLoad, imageIdsToDelete, tags, tagsIdDelete))
-      setImageIdsToDelete([]);
-      setTagsIdDelete([])
-      if (success) {
-        setShowSuccessAlert(true);
-        handleNavigate();
-      } else {
-        setShowErrorAlert(true);
+      const result = await dispatch(updateProductThunk(id, data, imgtoToLoad, imageIdsToDelete, tags, tagsIdDelete))
+
+      if (result) {
+        setImageIdsToDelete([]);
+        setTagsIdDelete([])
       }
+
+      handleNavigate(result);
     } catch (error) {
       console.error('Error al agregar el producto:', error);
-      setShowErrorAlert(true);
+
     }
   };
 
+  const handleNavigate = (isSuccess) => {
+    const title = isSuccess ? 'El producto actualizado' : 'Error en el producto';
+    const text = isSuccess ? 'El producto se ha actualizado correctamente' : 'Error en el producto';
+    const icon = isSuccess ? 'success' : 'error';
 
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
-
-  const handleCloseSuccessAlert = () => {
-    setShowSuccessAlert(false);
-
-  };
-
-  const handleCloseErrorAlert = () => {
-    setShowErrorAlert(false);
-  };
-
-  const handleNavigate = () => {    
     Swal.fire({
-      title: 'Producto actualizado',
-      text: 'El producto se ha actualizado correctamente',
-      icon: 'success',
-      confirmButtonText: 'Aceptar',
+      title,
+      text,
+      icon,
+      confirmButtonText: 'Salir',
+      showCancelButton: true, // Cambiado a true para mostrar el botón de cancelar
+      cancelButtonText: 'Modificar' // Añadido para el texto del botón de cancelar
     }).then((result) => {
       if (result.isConfirmed) {
         navigate('/inventory');
       }
-    })
+    });
   };
+
 
   const handleNavigateExit = () => {
     navigate('/inventory');
@@ -206,9 +197,9 @@ const EditProductPage = () => {
 
   // Inicializar los valores cuando el producto esté disponible
   useEffect(() => {
-    if (product) {
+    if (product) {     
       setValue('title', product.title || '');
-      setValue('sku', product.sku || '');
+      setValue('SKU', product.sku || '');
       setValue('description', product.description || '');
       setValue('new_product', product.new_product || false);
       setValue('stock', product.stock || 0);
@@ -223,58 +214,71 @@ const EditProductPage = () => {
     }
   }, [product, setValue]);
 
+  
+
   return (
     <>
       <div className="edit_product_page_container">
         <form action="" className="edit_product_page_form" onSubmit={handleSubmit(submit)}>
           <div className='edit_product_page_title_container'>
-            <p className='edit_product_page_title'>Agregar Producto</p>
+            <p className='edit_product_page_title'>Editar Producto</p>
           </div>
           {/*------------------------------\\ Image //-----------------------------------*/}
           <div className="edit_product_page_image_container">
-            {selectedImages ?
-              <img
-                src={selectedImages.url_small || URL.createObjectURL(selectedImages)}
-                alt="Imagen seleccionada"
-                className="edit_product_page_image"
-                loading="lazy"
-              /> :
-
-              <img
-                src={imageFiles[0]?.url_small || ''}
-
-                alt="Imagen seleccionada"
-                className="edit_product_page_image"
-                loading="lazy"
-              />
-            }
-          </div>
+  {selectedImages ? (
+    <img
+      src={
+        selectedImages?.url_small
+          ? selectedImages.url_small
+          : URL.createObjectURL(selectedImages)
+      }
+      alt="Imagen seleccionada"
+      className="edit_product_page_image"
+      loading="lazy"
+    />
+  ) : (
+    imageFiles.length > 0 && (
+      <img
+        src={
+          imageFiles[0]?.url_small
+            ? imageFiles[0].url_small
+            : URL.createObjectURL(imageFiles[0])
+        }
+        alt="Imagen principal"
+        className="edit_product_page_image"
+        loading="lazy"
+      />
+    )
+  )}
+</div>
 
 
           {/*------------------------------\\ Images Load  //-----------------------------------*/}
 
           <div className='edit_product_page_images_load_container'>
-            {
-              imageFiles.length === 0 && <p className="edit_product_page_img_msj">¡Imagenes!</p>
-            }
-            {
-              imageFiles?.map((image, index) => (
-                <div key={index} className="edit_product_page_images_img_container">
-                  <img
-                    src={image.url_small || URL.createObjectURL(image)}
-                    alt={`Miniatura ${index + 1}`}
-                    className={`edit_product_page_images ${selectedImages === image && "edit_product_page_images_border"}`}
-                    onClick={() => handleThumbnailClick(index)}
-                  />
-                  <div
-                    className=''
-                    onClick={() => handleRemoveImage(index, image.id ? [image.id] : null)}
-                  >
-                    <i className='bx bx-x edit_product_page_icon_delete_image'></i>
-                  </div>
-                </div>
-              ))}
-          </div>
+  {imageFiles.length === 0 && <p className="edit_product_page_img_msj">¡Carge Imagenes!</p>}
+  {
+    imageFiles?.map((image, index) => (
+      <div key={index} className="edit_product_page_images_img_container">
+        <img
+          src={
+            // Si la imagen es un archivo local, usa `URL.createObjectURL`, sino usa `url_small`
+            image instanceof File 
+              ? URL.createObjectURL(image) 
+              : image.url_small
+          }
+          alt={`Miniatura ${index + 1}`}
+          className={`edit_product_page_images ${selectedImages === image && "edit_product_page_images_border"}`}
+          onClick={() => handleThumbnailClick(index)}
+        />
+        <div onClick={() => handleRemoveImage(index, image.id ? [image.id] : null)}>
+          <i className='bx bx-x edit_product_page_icon_delete_image'></i>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
 
           {/*------------------------------\\ Input img //-----------------------------------*/}
 
@@ -320,7 +324,7 @@ const EditProductPage = () => {
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
                   <Box style={{ marginTop: 20 }}>
                     <Controller
-                      name="sku"
+                      name="SKU"
                       control={control}
                       defaultValue=""
                       rules={{ required: 'Este campo es obligatorio' }}
@@ -580,12 +584,12 @@ const EditProductPage = () => {
                             >
                               {collections
                                 ?.slice()
-                                 .sort((a, b) => a.name.localeCompare(b.name))
-                                 .map((collection) => (
-                                <MenuItem key={collection.id} value={collection.id}>
-                                  {collection.name}
-                                </MenuItem>
-                              ))}
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((collection) => (
+                                  <MenuItem key={collection.id} value={collection.id}>
+                                    {collection.name}
+                                  </MenuItem>
+                                ))}
                             </Select>
                           )}
                         />
@@ -671,12 +675,14 @@ const EditProductPage = () => {
                     variant="contained"
                     color="primary"
                     type="submit"
+                    sx={{ width: '100%', maxWidth: '220px' }}
                   >
                     ACTUALIZAR
                   </Button>
                   <Button
                     variant="contained"
                     color="secondary"
+                    sx={{ width: '100%', maxWidth: '220px' }}
                     onClick={handleNavigateExit}
                   >
                     SALIR

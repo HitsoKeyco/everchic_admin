@@ -114,25 +114,7 @@ label{
 }
 
 
-button{
-    height: 40px;
-    width: 80%;
-    background-color: var(--colorButton);
-    border: none;
-    color: var(--bgContainer_a);
 
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover{
-color: var(--bgContainer_a);
-background-color: var(--bgButtonHover);
-}
 
 
 img{
@@ -165,3 +147,12 @@ img{
 .qr_image_title{
     padding-top: 50px;
 }
+
+.app{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+
+}
+

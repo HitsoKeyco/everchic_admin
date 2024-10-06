@@ -4,6 +4,7 @@ import './css/QrImage.css';
 import Skeleton from '@mui/material/Skeleton';
 import { Alert, AlertTitle, Button } from '@mui/material';
 import io from 'socket.io-client';  // Importar socket.io-client
+import getConfigAuth from '../../utils/getConfigAuth';
 
 
 
@@ -16,9 +17,11 @@ const QrImage = () => {
     const [testMessageSuccess, setTestMessageSuccess] = useState(false);
     const [testMessageFail, setTestMessageFail] = useState(false);
     const [isSending, setIsSending] = useState(false); // Estado para controlar el envío
-
+    const data = getConfigAuth();
+    console.log(data);
+    
     useEffect(() => {
-        const socket = io('http://everchic.ec/whatsapp_socket_io', {
+        const socket = io(PORT_SOCKET_IO, {
             extraHeaders: {
                 "X-My-Custom-Header": "Este es el valor de mi encabezado personalizado" // Envía el encabezado personalizado
             },
@@ -63,9 +66,10 @@ const QrImage = () => {
     const qrFetch = async () => {
         try {
             const response = await axios.get(PORT_BOT_WHATSAPP, {
-                responseType: 'arraybuffer'
-            });
+                responseType: 'arraybuffer',
 
+        })
+                        
             if (response && response.data) {
                 const byteArray = new Uint8Array(response.data);
                 const base64String = btoa(String.fromCharCode(...byteArray));

@@ -11,6 +11,10 @@ import getConfigAuth from '../utils/getConfigAuth';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import { Button, TextField } from '@mui/material';
+import CreateCollection from '../components/CreateCollection';
+import CreateSize from '../components/CreateSize';
+import CreateCategory from '../components/CreateCategory';
+import CreateSuppliers from '../components/CreateSuppliers';
 
 const InventoryPage = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -104,13 +108,26 @@ const InventoryPage = () => {
                     <p className='inventory_page_title'>Inventario</p>
                     <div className="inventory_page_controller_user">
                         <div className="inventory_page_controllers_search_container">
-                            <TextField id="outlined-basic" label="Buscar"  fullWidth variant="outlined" onChange={(e) => setIsSearchProduct(e.target.value)} />                            
+                            <TextField id="outlined-basic" label="Buscar" fullWidth variant="outlined" onChange={(e) => setIsSearchProduct(e.target.value)} />
                         </div>
                         <div className="inventory_page_controllers_add_contact_container">
                             <i className='bx bx-add-to-queue inventory_page_add' onClick={handleAddProduct}></i>
                         </div>
                     </div>
                 </div>
+                {
+                    <div className='inventory_page_block_buttons_functions_container'>
+                        <div className='inventory_page_block_buttons'>
+                            <CreateCollection />
+                            <CreateSize />
+
+                        </div>
+                        <div className='inventory_page_block_buttons'>
+                            <CreateCategory />
+                            <CreateSuppliers />
+                        </div>
+                    </div>
+                }
                 {
                     productsAPI.map(product => (
                         <div
@@ -125,8 +142,8 @@ const InventoryPage = () => {
             <div className='inventory_page_control_pagination_container'>
                 <Stack spacing={2}>
                     <Pagination
-                        count={pagination.totalPages}
-                        page={pagination.currentPage}
+                        count={Number(pagination.totalPages)}
+                        page={Number(pagination.currentPage)}
                         onChange={handleChangePage}
                         variant="outlined"
                         shape="rounded"
