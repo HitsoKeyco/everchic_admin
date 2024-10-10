@@ -197,7 +197,7 @@ const handleNavigate = (isSuccess) => {
             <TextField
               type="text"
               id="outlined-basic"
-              label="SKU"
+              label="sku"
               style={{ width: "95%" }}
               variant="outlined"
               error={!!errors.sku}

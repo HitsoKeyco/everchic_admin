@@ -155,19 +155,16 @@ const EditProductPage = () => {
 
 
   const submit = async (data) => {
-
+    console.log(data);
+    
     try {
-      const result = await dispatch(updateProductThunk(id, data, imgtoToLoad, imageIdsToDelete, tags, tagsIdDelete))
-
-      if (result) {
-        setImageIdsToDelete([]);
-        setTagsIdDelete([])
-      }
-
+      const result = await dispatch(updateProductThunk(id, data, imgtoToLoad, imageIdsToDelete, tags, tagsIdDelete));
       handleNavigate(result);
     } catch (error) {
       console.error('Error al agregar el producto:', error);
-
+    } finally {
+      setImageIdsToDelete([]);
+      setTagsIdDelete([]);
     }
   };
 
@@ -199,7 +196,7 @@ const EditProductPage = () => {
   useEffect(() => {
     if (product) {     
       setValue('title', product.title || '');
-      setValue('SKU', product.sku || '');
+      setValue('sku', product.sku || '');
       setValue('description', product.description || '');
       setValue('new_product', product.new_product || false);
       setValue('stock', product.stock || 0);
@@ -324,7 +321,7 @@ const EditProductPage = () => {
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
                   <Box style={{ marginTop: 20 }}>
                     <Controller
-                      name="SKU"
+                      name="sku"
                       control={control}
                       defaultValue=""
                       rules={{ required: 'Este campo es obligatorio' }}
@@ -333,7 +330,7 @@ const EditProductPage = () => {
                           {...field}
                           type="text"
                           id="sku"
-                          label="SKU"
+                          label="sku"
                           variant="outlined"
                           style={{ width: "100%" }}
                           error={!!errors.sku}
